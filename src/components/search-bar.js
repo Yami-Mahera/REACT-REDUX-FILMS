@@ -15,9 +15,9 @@ class SearchBar extends Component {
         return (
             <div className = "row" >
                 <div className = "col-md-8 input-group" >
-                    <input type="text" className="form-control input-lg" placeholder = { this.state.placeHolder } onChange = { this.handleChange.bind(this) } />
+                    <input type="text" className="form-control input-lg" placeholder = { this.state.placeHolder } onChange = { (event) => this.handleChange(event) } />
                     <span className = "input-group-btn">
-                        <button className = "btn btn-secondary" onClick = {this.handleOnclick.bind(this)} >Rechercher</button>
+                        <button className = "btn btn-secondary" onClick = { () => this.handleOnclick()} >Rechercher</button>
                     </span>
                 </div>
             </div>
@@ -32,7 +32,7 @@ class SearchBar extends Component {
         }
     }
 
-    handleOnclick(event) {
+    handleOnclick() {
         this.seach();
     }
 

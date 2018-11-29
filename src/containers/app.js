@@ -22,14 +22,16 @@ class App extends Component {
     }
 
     initMovies() {
-        axios.get(`${API_END_POINT}${POPULAR_MOVIES_URL}&${API_KEY}`).then(res => {
+        axios.get(`${API_END_POINT}${POPULAR_MOVIES_URL}&${API_KEY}`)
+            .then(res => {
             this.setState({ movieList: res.data.results.slice(1,6), currentMovie: res.data.results[0]}, () => 
                 this.applyVideoTOCurrentMovie());
         });
     }
 
     applyVideoTOCurrentMovie() {
-        axios.get(`${API_END_POINT}movie/${this.state.currentMovie.id}?${API_KEY}&append_to_response=videos&include_adult=false`).then(res => {
+        axios.get(`${API_END_POINT}movie/${this.state.currentMovie.id}?${API_KEY}&append_to_response=videos&include_adult=false`)
+            .then(res => {
             const youtubeKey = res.data.videos.results[0].key;
             let newCurrentMovieState = this.state.currentMovie;
             newCurrentMovieState.videoId = youtubeKey;
@@ -41,7 +43,7 @@ class App extends Component {
         return (
             <div>
                 <div className="seach_bar">
-                    <SearchBar callback = {this.onClickSearch.bind(this)} />
+                    <SearchBar callback = {(searchText) => this.onClickSearch(searchText)} />
                 </div>
                 <div className="row" >
                     <div className="col-md-8" >
@@ -58,7 +60,7 @@ class App extends Component {
 
     renderVideoList () {
         if( this.state.movieList.length >= 5 ) {
-            return <VideoList movieList = {this.state.movieList} callback = {this.onClickListItem.bind(this)}/>
+            return <VideoList movieList = {this.state.movieList} callback = {(movie) => this.onClickListItem(movie)}/>
         }  
     }
 
@@ -70,7 +72,8 @@ class App extends Component {
     }
 
     onClickSearch (searchText) {
-        searchText && axios.get(`${API_END_POINT}${SEARCH_URL}&${API_KEY}&query=${searchText}`).then(res => {
+        searchText && axios.get(`${API_END_POINT}${SEARCH_URL}&${API_KEY}&query=${searchText}`)
+            .then(res => {
             (res.data && res.data.results[0]) && (res.data.results[0].id !== this.state.currentMovie.id) 
                 && this.setState({currentMovie: res.data.results[0]}, () => {
                     this.applyVideoTOCurrentMovie();
@@ -80,9 +83,10 @@ class App extends Component {
     }
 
     setRecommendation () {
-        axios.get(`${API_END_POINT}movie/${this.state.currentMovie.id}/recommendations?${API_KEY}&language=fr`).then(res => {
-            this.setState({ movieList: res.data.results.slice(0,5)});
-        });
+        axios.get(`${API_END_POINT}movie/${this.state.currentMovie.id}/recommendations?${API_KEY}&language=fr`)
+            .then(res => 
+                this.setState({ movieList: res.data.results.slice(0,5)})
+            );
     }
 }
 
